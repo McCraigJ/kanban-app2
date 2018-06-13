@@ -5,6 +5,8 @@ import Notes from './components/Notes';
 
 import uuid from 'uuid';
 
+import connect from './libs/connect';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -37,6 +39,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div className="notes-container">
+          {this.props.test}
           <button className="add-note" onClick={this.addNote}>+</button>
           <Notes 
             notes={notes}
@@ -75,7 +78,7 @@ class App extends Component {
       })
     });
   }
-
+  
   editNote = (id, task) => {
     this.setState({
       notes: this.state.notes.map(note => {
@@ -89,4 +92,8 @@ class App extends Component {
   }
 }
 
-export default App;
+//export default App;
+
+export default connect(() => ({
+  test: 'test'
+}))(App)
