@@ -36,8 +36,14 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <button onClick={this.addNote}>+</button>
-        <Notes notes={notes} />
+        <div className="notes-container">
+          <button className="add-note" onClick={this.addNote}>+</button>
+          <Notes 
+            notes={notes}
+            onNoteClick={this.activateNoteEdit}
+            onEdit={this.editNote}
+            onDelete={this.deleteNote} />
+        </div>
       </div>
     );
   }
@@ -48,6 +54,37 @@ class App extends Component {
         id: uuid.v4(),
         task: 'New task'
       }])
+    });
+  }
+
+  deleteNote = (id, e) => {
+    e.stopPropagation();
+
+    this.setState({
+      notes: this.state.notes.filter(note => note.id !== id)
+    });
+  }
+
+  activateNoteEdit = (id) => {
+    this.setState({
+      notes: this.state.notes.map(note => {
+        if (note.id === id) {
+          note.editing = true;
+        }
+        return note;
+      })
+    });
+  }
+
+  editNote = (id, task) => {
+    this.setState({
+      notes: this.state.notes.map(note => {
+        if (note.id === id) {
+          note.editing = false;
+          note.task = task;
+        }
+        return note;
+      })
     });
   }
 }
