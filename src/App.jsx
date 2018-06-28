@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import uuid from 'uuid';
 import logo from './logo.svg';
 import './App.css';
 import Notes from './components/Notes';
-
-import uuid from 'uuid';
-
 import connect from './libs/connect';
+
+import NoteActions from './actions/NoteActions';
+
 
 class App extends Component {
   
@@ -35,11 +36,15 @@ class App extends Component {
   }
 
   addNote = () => {
-    this.setState({
-      notes: this.state.notes.concat([{
-        id: uuid.v4(),
-        task: 'New task'
-      }])
+    // this.setState({
+    //   notes: this.state.notes.concat([{
+    //     id: uuid.v4(),
+    //     task: 'New task'
+    //   }])
+    // });    
+    this.props.NoteActions.create({
+      id: uuid.v4(),
+      task: 'New task'
     });
   }
 
@@ -79,4 +84,6 @@ class App extends Component {
 
 export default connect(({notes}) => ({
   notes
-}))(App)
+}), {
+  NoteActions
+})(App)
