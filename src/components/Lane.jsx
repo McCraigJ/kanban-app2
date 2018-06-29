@@ -1,9 +1,9 @@
 import React from 'react';
-import uuid from 'uuid';
 import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
 import LaneActions from '../actions/LaneActions';
 import Notes from './Notes';
+import LaneHeader from './LaneHeader';
 
 const Lane = ({
   lane, notes, LaneActions, NoteActions, ...props
@@ -11,47 +11,20 @@ const Lane = ({
   const editNote = (id, task) => {
     NoteActions.update({ id, task, editing: false });
   };
-  const addNote = e => {
-    e.stopPropagation();
 
-    const noteId = uuid.v4();
-
-    NoteActions.create({
-      id: noteId,
-      task: 'New task'
-    });
-
-    LaneActions.attachToLane({
-      laneId: lane.id,
-      noteId
-    });
-  };
   const deleteNote = (noteId, e) => {
     e.stopPropagation();
-
     NoteActions.delete(noteId);
-
-    LaneActions.detachFromLane({
-      laneId: lane.id,
-      noteId
-    });
-
   };
   const activateNoteEdit = id => {
     NoteActions.update({ id, editing: true });
   };
 
   return (
-    <div {...props}>
-      <div className="lane-header">
-        <div className="lane-add-note">
-          <button onClick={addNote}>+ Add Note</button>
-        </div>
-        <div className="lane-name">{lane.name}</div>
-      </div>
-      <Notes
-        //notes={notes}
-        notes={selectNotesByIds(notes, lane.notes)}
+    <div {...props}>  
+      <LaneHeader lane={lane} />    
+      <Notes        
+        notes={selectNotesByLaneId(notes, lane.id)}
         onNoteClick={activateNoteEdit}
         onEdit={editNote}
         onDelete={deleteNote} />
@@ -59,17 +32,8 @@ const Lane = ({
   );
 };
 
-function selectNotesByIds(allNotes, noteIds = []) {
-  // `reduce` is a powerful method that allows us to
-  // fold data. You can implement `filter` and `map`
-  // through it. Here we are using it to concatenate
-  // notes matching to the ids.
-  return noteIds.reduce((notes, id) =>
-    // Concatenate possible matching ids to the result
-    notes.concat(
-      allNotes.filter(note => note.id === id)
-    )
-  , []);
+function selectNotesByLaneId(allNotes, laneId) { 
+  return allNotes.filter(note => note.laneId === laneId);
 }
 
 export default connect(

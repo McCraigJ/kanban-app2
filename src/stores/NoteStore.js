@@ -31,4 +31,10 @@ export default class NoteStore {
     });
   }
 
+  deleteAllForLane(laneId) {
+    this.setState({
+      notes: this.notes.filter(note => note.laneId !== laneId)
+    })
+  }
+
 }
