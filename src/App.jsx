@@ -2,88 +2,96 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 import logo from './logo.svg';
 import './App.css';
-import Notes from './components/Notes';
+// import Notes from './components/Notes';
 import connect from './libs/connect';
+//import NoteActions from './actions/NoteActions';
 
-import NoteActions from './actions/NoteActions';
+import Lanes from './components/Lanes';
+import LaneActions from './actions/LaneActions';
 
 
-class App extends Component {
-  
-  render() {
 
-    const { notes } = this.props;    
 
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div className="notes-container">          
-          <button className="add-note" onClick={this.addNote}>+</button>
-          <Notes 
-            notes={notes}
-            onNoteClick={this.activateNoteEdit}
-            onEdit={this.editNote}
-            onDelete={this.deleteNote} />
-        </div>
-      </div>
-    );
-  }
-
-  addNote = () => {
-    // this.setState({
-    //   notes: this.state.notes.concat([{
-    //     id: uuid.v4(),
-    //     task: 'New task'
-    //   }])
-    // });    
-    this.props.NoteActions.create({
+const App = ({LaneActions, lanes}) => {
+  const addLane = () => {
+    LaneActions.create({
       id: uuid.v4(),
-      task: 'New task'
+      name: 'New lane'
     });
-  }
+  };
 
-  deleteNote = (id, e) => {
-    e.stopPropagation();
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1 className="App-title">Welcome to Kanban</h1>
+      </header>      
+      <div>
+        <button className="add-lane" onClick={addLane}>+</button>
+        <Lanes lanes={lanes} />
+      </div>
+    </div>
+  );
+};
 
-    this.setState({
-      notes: this.state.notes.filter(note => note.id !== id)
-    });
-  }
+export default connect(({lanes}) => ({
+  lanes
+}), {
+  LaneActions
+})(App)
 
-  activateNoteEdit = (id) => {
-    this.setState({
-      notes: this.state.notes.map(note => {
-        if (note.id === id) {
-          note.editing = true;
-        }
-        return note;
-      })
-    });
-  }
+// // class App extends Component {
+
+// //   render() {
+
+// //     const { notes } = this.props;    
+
+// //     return (
+// //       <div className="App">
+// //         <header className="App-header">
+// //           <img src={logo} className="App-logo" alt="logo" />
+// //           <h1 className="App-title">Welcome to Kanban</h1>
+// //         </header>
+// //         <p className="App-intro">
+// //           To get started, edit <code>src/App.js</code> and save to reload.
+// //         </p>
+// //         <div className="notes-container">          
+// //           <button className="add-note" onClick={this.addNote}>+</button>
+// //           <Notes 
+// //             notes={notes}
+// //             onNoteClick={this.activateNoteEdit}
+// //             onEdit={this.editNote}
+// //             onDelete={this.deleteNote} />
+// //         </div>
+// //       </div>
+// //     );
+// //   }
+
+//   addNote = () => { 
+//     this.props.NoteActions.create({
+//       id: uuid.v4(),
+//       task: 'New task'
+//     });
+//   }
+
+//   deleteNote = (id, e) => {
+//     e.stopPropagation();
+//     this.props.NoteActions.delete(id);
+//   }
+
+//   activateNoteEdit = (id) => {
+//     this.props.NoteActions.update({id, editing: true});    
+//   }
   
-  editNote = (id, task) => {
-    this.setState({
-      notes: this.state.notes.map(note => {
-        if (note.id === id) {
-          note.editing = false;
-          note.task = task;
-        }
-        return note;
-      })
-    });
-  }
-}
+//   editNote = (id, task) => {
+//     this.props.NoteActions.update({id, editing: false, task: task});       
+//   }
+// }
 
 //export default App;
 
-export default connect(({notes}) => ({
-  notes
-}), {
-  NoteActions
-})(App)
+// export default connect(({notes}) => ({
+//   notes
+// }), {
+//   NoteActions
+// })(App)
