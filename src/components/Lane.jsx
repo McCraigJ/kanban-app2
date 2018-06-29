@@ -2,13 +2,14 @@ import React from 'react';
 import uuid from 'uuid';
 import connect from '../libs/connect';
 import NoteActions from '../actions/NoteActions';
+import LaneActions from '../actions/LaneActions';
 import Notes from './Notes';
 
 const Lane = ({
-  lane, notes, NotesActions, ...props
+  lane, notes, LaneActions, NoteActions, ...props
 }) => {
   const editNote = (id, task) => {
-    NoteActions.update({id, task, editing: false});
+    NoteActions.update({ id, task, editing: false });
   };
   const addNote = e => {
     e.stopPropagation();
@@ -19,39 +20,63 @@ const Lane = ({
       id: noteId,
       task: 'New task'
     });
-  };
 
+    LaneActions.attachToLane({
+      laneId: lane.id,
+      noteId
+    });
+  };
   const deleteNote = (noteId, e) => {
     e.stopPropagation();
-    NoteActions.delete(noteId);
-  };
 
+    NoteActions.delete(noteId);
+
+    LaneActions.detachFromLane({
+      laneId: lane.id,
+      noteId
+    });
+
+  };
   const activateNoteEdit = id => {
-    NoteActions.update({id, editing: true});
+    NoteActions.update({ id, editing: true });
   };
 
   return (
     <div {...props}>
       <div className="lane-header">
         <div className="lane-add-note">
-          <button onClick={addNote}>+</button>
+          <button onClick={addNote}>+ Add Note</button>
         </div>
         <div className="lane-name">{lane.name}</div>
       </div>
       <Notes
-        notes={notes}
+        //notes={notes}
+        notes={selectNotesByIds(notes, lane.notes)}
         onNoteClick={activateNoteEdit}
         onEdit={editNote}
         onDelete={deleteNote} />
     </div>
   );
+};
+
+function selectNotesByIds(allNotes, noteIds = []) {
+  // `reduce` is a powerful method that allows us to
+  // fold data. You can implement `filter` and `map`
+  // through it. Here we are using it to concatenate
+  // notes matching to the ids.
+  return noteIds.reduce((notes, id) =>
+    // Concatenate possible matching ids to the result
+    notes.concat(
+      allNotes.filter(note => note.id === id)
+    )
+  , []);
 }
 
-
 export default connect(
-  ({notes}) => ({
+  ({ notes }) => ({
     notes
   }), {
-    NoteActions
+    NoteActions,
+    LaneActions
   }
 )(Lane)

@@ -1,16 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import uuid from 'uuid';
 import logo from './logo.svg';
 import './App.css';
-// import Notes from './components/Notes';
 import connect from './libs/connect';
-//import NoteActions from './actions/NoteActions';
 
 import Lanes from './components/Lanes';
 import LaneActions from './actions/LaneActions';
-
-
-
 
 const App = ({LaneActions, lanes}) => {
   const addLane = () => {
@@ -27,7 +22,7 @@ const App = ({LaneActions, lanes}) => {
         <h1 className="App-title">Welcome to Kanban</h1>
       </header>      
       <div>
-        <button className="add-lane" onClick={addLane}>+</button>
+        <button className="add-lane" onClick={addLane}>+ Add Lane</button>
         <Lanes lanes={lanes} />
       </div>
     </div>
