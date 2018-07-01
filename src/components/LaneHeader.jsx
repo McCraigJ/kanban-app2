@@ -15,7 +15,7 @@ export default connect(() => ({}), {
     e.stopPropagation();
 
     const noteId = uuid.v4();
-
+    
     NoteActions.create({
       id: noteId,
       task: 'New task',
