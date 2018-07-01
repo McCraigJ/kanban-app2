@@ -40,11 +40,11 @@ export default class NoteStore {
   //move the source note before the target note and update the lane of the source
   move({sourceId, targetId, targetLaneId}) {
 
+    
+    const movingToEmptyLane = targetId === null;
+
     // because immutability
     var notes = this.notes;
-
-    // find the target note's index position in the array
-    var tarNoteIndex = notes.map(function(e) { return e.id; }).indexOf(targetId);
 
     // update the source's lane and find it's index
     var sourceIndex = 0;
@@ -60,8 +60,13 @@ export default class NoteStore {
       return note;
     })    
 
-    // splice out the source and splice it back in at the appropriate array position
-    notes.splice(tarNoteIndex, 0, notes.splice(sourceIndex, 1)[0]);
+    if (!movingToEmptyLane) {
+      // find the target note's index position in the array
+      var tarNoteIndex = notes.map(function(e) { return e.id; }).indexOf(targetId);
+      // splice out the source and splice it back in at the appropriate array position
+      notes.splice(tarNoteIndex, 0, notes.splice(sourceIndex, 1)[0]);
+    }
+    
 
     this.setState({
       notes: notes
