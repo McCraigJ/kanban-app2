@@ -16,19 +16,26 @@ class ConnectedNotes extends Component {
   constructor(props) {
     super(props);   
     this.moveNote = this.moveNote.bind(this); 
+    //this.updateNote = this.updateNote.bind(this);
   }
 
   moveNote(sourceId, targetId, targetLaneId) {
     this.props.moveNote(sourceId, targetId, targetLaneId);
   }
 
-  editNote(id, value) {
+  editNote(id, laneId, task) {
     //console.log(id, value);
 
-    var note = this.props.note;
+    
+    var note = { 
+      id: id,
+      task: task,
+      laneId: laneId
+    };
+    //this.props.note;
     console.log(note);
 
-    this.props.updateNote(sourceId, targetId, targetLaneId);
+    this.props.updateNote(note);
   }
 
   // clickNote(id) {
@@ -52,7 +59,7 @@ class ConnectedNotes extends Component {
                 className="editable"
                 //editing={false} // editing}
                 value={task}
-                onEdit={this.editNote.bind(null, id)} 
+                onEdit={this.editNote} 
               />
             {/* <button
               className="delete"<Editable
