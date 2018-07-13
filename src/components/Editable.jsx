@@ -26,9 +26,8 @@ class Editable extends Component {
   finishEdit = (e) => {
     const value = e.target.value;
 
-    this.setState({editing: false});
-    console.log(value);
-    
+    this.setState({editing: false});    
+
     if (this.props.onEdit) {
       this.props.onEdit(value);
     }
