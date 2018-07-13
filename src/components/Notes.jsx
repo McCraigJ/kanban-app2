@@ -22,14 +22,19 @@ class ConnectedNotes extends Component {
     this.props.moveNote(sourceId, targetId, targetLaneId);
   }
 
-  editNote() {
-    
+  editNote(id, value) {
+    //console.log(id, value);
+
+    var note = this.props.note;
+    console.log(note);
+
+    this.props.updateNote(sourceId, targetId, targetLaneId);
   }
 
-  clickNote(id) {
-    //event.stopPropagation();
-    this.props.onNoteClick(this.props.note)
-  }
+  // clickNote(id) {
+  //   //event.stopPropagation();
+  //   this.props.onNoteClick(this.props.note)
+  // }
 
   render() {
 
@@ -47,7 +52,7 @@ class ConnectedNotes extends Component {
                 className="editable"
                 //editing={false} // editing}
                 value={task}
-                onEdit={onEdit.bind(null, id)} 
+                onEdit={this.editNote.bind(null, id)} 
               />
             {/* <button
               className="delete"<Editable
