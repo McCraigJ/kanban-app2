@@ -2,6 +2,8 @@ import React from 'react';
 import uuid from 'uuid';
 import connect from 'react-redux';
 import { addLane, updateLane, deleteLane } from '../actions/LaneActions';
+
+
 // import connect from '../libs/connect';
 // import NoteActions from '../actions/NoteActions';
 // import LaneActions from '../actions/LaneActions';
