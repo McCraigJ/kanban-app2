@@ -1,46 +1,63 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import uuid from 'uuid';
+import { addLane } from './actions/LaneActions';
 
-import {compose} from 'redux';
+//import {compose} from 'redux';
+
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import logo from './logo.svg';
 import './App.css';
-import connect from './libs/connect';
-
 import Lanes from './components/Lanes';
 import LaneActions from './actions/LaneActions';
 
-const App = ({LaneActions, lanes}) => {
-  const addLane = () => {
-    LaneActions.create({
+const mapDispatchToProps = dispatch => {
+  return {
+    addLane: lane => dispatch(addLane(lane))
+  };
+};
+
+const mapStateToProps = state => {
+  return { lanes: state.lanes };
+};
+
+class ConnectedApp extends Component {
+
+  constructor() {
+    super();
+
+    this.handleAddLane = this.handleAddLane.bind(this);
+  }
+  
+  handleAddLane(event) {
+    this.props.addLane( {
       id: uuid.v4(),
       name: 'New lane'
     });
-  };
+  }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="App-title">Welcome to Kanban</h1>
-      </header>      
-      <div>
-        <button className="add-lane" onClick={addLane}>+ Add Lane</button>
-        <Lanes lanes={lanes} />
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Welcome to Kanban</h1>
+        </header>      
+        <div>
+          <button className="add-lane" onClick={this.handleAddLane}>+ Add Lane</button>
+          <Lanes lanes={this.props.lanes} />
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+  
+}
 
-export default compose(
-  DragDropContext(HTML5Backend),
-  connect(
-    ({lanes}) => ({lanes}),
-    {LaneActions}
-  )
-)(App)
+const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
+
+export default App;
 
 // // class App extends Component {
 

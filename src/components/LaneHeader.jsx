@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import uuid from 'uuid';
-import connect from 'react-redux';
+import { connect } from 'react-redux';
 import { addLane, updateLane, deleteLane } from '../actions/LaneActions';
+import { addNote } from '../actions/NoteActions';
 
 
 // import connect from '../libs/connect';
@@ -14,71 +15,99 @@ const mapDispatchToProps = dispatch => {
   return {
     addLane: lane => dispatch (addLane(lane)),
     updateLane: lane => dispatch (updateLane(lane)),
-    deleteLane: laneId => dispatch (deleteLane(laneId))
+    deleteLane: laneId => dispatch (deleteLane(laneId)),
+    addNote: note => dispatch(addNote(note))
   };
 }
 
-class ConnectedLane extends Component {
-  constructor() {
-    super();
+class ConnectedLaneHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.activateLaneEdit = this.activateLaneEdit.bind(this);
+    this.addNote = this.addNote.bind(this);
   }
 
   activateLaneEdit(event) {
     this.props.updateLane()
   }
 
+  addNote(event) {
+
+    var { lane } = this.props;
+
+    event.stopPropagation();
+
+    this.props.addNote({
+            id: uuid.v4(),
+            task: 'New task',
+            laneId: lane.id
+          });
+  }
+
+
   render() {
-    <div className="lane-header" onClick={activateLaneEdit} {...props}>
-      <div className="lane-add-note">
-        <button onClick={addNote}>+</button>
+    // onClick={activateLaneEdit} {...props}>
+    
+    var { lane } = this.props;
+
+    return (
+      <div className="lane-header">       
+        <div className="lane-add-note">
+          <button onClick={this.addNote}>+</button>
+        </div>
+        <Editable className="lane-name" editing={lane.editing} value={lane.name} /> 
+         {/* onEdit={editName} /> */}
+        <div className="lane-delete">
+          {/* <button onClick={deleteLane}>x</button> */}
+        </div>
       </div>
-      <Editable className="lane-name" editing={lane.editing} value={lane.name} onEdit={editName} />
-      <div className="lane-delete">
-        <button onClick={deleteLane}>x</button>
-      </div>
-    </div>
+    );
   }
 
 }
 
+const LaneHeader = connect(null, mapDispatchToProps)(ConnectedLaneHeader);
 
-export default connect(() => ({}), {
-  NoteActions,
-  LaneActions
-})(({ lane, LaneActions, NoteActions, ...props }) => {
-  const addNote = e => {
-    e.stopPropagation();
+export default LaneHeader;
 
-    const noteId = uuid.v4();
+
+// export default connect(() => ({}), {
+//   NoteActions,
+//   LaneActions
+// })(({ lane, LaneActions, NoteActions, ...props }) => {
+//   const addNote = e => {
+//     e.stopPropagation();
+
+//     const noteId = uuid.v4();
     
-    NoteActions.create({
-      id: noteId,
-      task: 'New task',
-      laneId: lane.id
-    });
-  };
+//     NoteActions.create({
+//       id: noteId,
+//       task: 'New task',
+//       laneId: lane.id
+//     });
+//   };
 
-  const deleteLane = e => {
-    e.stopPropagation();
-    NoteActions.deleteAllForLane(lane.id);
-    LaneActions.delete(lane.id);
-  };
+//   const deleteLane = e => {
+//     e.stopPropagation();
+//     NoteActions.deleteAllForLane(lane.id);
+//     LaneActions.delete(lane.id);
+//   };
 
-  const activateLaneEdit = () => {
-    LaneActions.update({
-      id: lane.id,
-      editing: true
-    });
-  };
-  const editName = name => {
-    LaneActions.update({
-      id: lane.id,
-      name,
-      editing: false
-    });
-  };
+//   const activateLaneEdit = () => {
+//     LaneActions.update({
+//       id: lane.id,
+//       editing: true
+//     });
+//   };
+//   const editName = name => {
+//     LaneActions.update({
+//       id: lane.id,
+//       name,
+//       editing: false
+//     });
+//   };
 
-  return (
+//   return (
     
-  );
-})
+//   );
+// })
