@@ -3,12 +3,6 @@ import uuid from 'uuid';
 import { connect } from 'react-redux';
 import { addLane, updateLane, deleteLane } from '../actions/LaneActions';
 import { addNote } from '../actions/NoteActions';
-
-
-// import connect from '../libs/connect';
-// import NoteActions from '../actions/NoteActions';
-// import LaneActions from '../actions/LaneActions';
-
 import Editable from './Editable';
 
 const mapDispatchToProps = dispatch => {
@@ -22,21 +16,15 @@ const mapDispatchToProps = dispatch => {
 
 class ConnectedLaneHeader extends Component {
   constructor(props) {
-    super(props);
-    this.activateLaneEdit = this.activateLaneEdit.bind(this);
+    super(props);    
     this.addNote = this.addNote.bind(this);
-  }
-
-  activateLaneEdit(event) {
-    this.props.updateLane()
+    this.editLane = this.editLane.bind(this);    
+    this.deleteLane = this.deleteLane.bind(this);
   }
 
   addNote(event) {
-
     var { lane } = this.props;
-
     event.stopPropagation();
-
     this.props.addNote({
             id: uuid.v4(),
             task: 'New task',
@@ -44,9 +32,20 @@ class ConnectedLaneHeader extends Component {
           });
   }
 
+  editLane(id, name) {
+    var lane = { 
+      id: id,
+      name: name      
+    };
+    this.props.updateLane(lane);
+  }
+
+  deleteLane(event) {
+    event.stopPropagation();
+    this.props.deleteLane(this.props.lane.id);
+  }
 
   render() {
-    // onClick={activateLaneEdit} {...props}>
     
     var { lane } = this.props;
 
@@ -55,10 +54,13 @@ class ConnectedLaneHeader extends Component {
         <div className="lane-add-note">
           <button onClick={this.addNote}>+</button>
         </div>
-        <Editable className="lane-name" editing={lane.editing} value={lane.name} /> 
-         {/* onEdit={editName} /> */}
+        <Editable className="lane-name"
+                id={lane.id} value={lane.name}
+                onEdit={this.editLane} />
+        
+        
         <div className="lane-delete">
-          {/* <button onClick={deleteLane}>x</button> */}
+           <button onClick={this.deleteLane}>x</button> 
         </div>
       </div>
     );

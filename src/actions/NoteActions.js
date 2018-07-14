@@ -1,8 +1,3 @@
-// import alt from '../libs/alt';
-
-// export default alt.generateActions('create', 'update', 'delete', 
-// 'deleteAllForLane', 'move');
-
 import { ADD_NOTE, UPDATE_NOTE, DELETE_NOTE, DELETE_NOTES_FOR_LANE, MOVE_NOTE } from '../constants/ActionTypes';
 
 export const addNote = note => ({ type: ADD_NOTE, payload: note });

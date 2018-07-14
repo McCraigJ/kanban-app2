@@ -20,7 +20,7 @@ class ConnectedLane extends Component {
   }  
 
   render() {
-    return (<div {...this.props}>  
+    return (<div className={this.props.className} key={this.props.lane.id} lane={this.props.lane}>  
        <LaneHeader lane={this.props.lane} />
        <Notes        
          notes={selectNotesByLaneId(this.props.notes, this.props.lane.id)}
