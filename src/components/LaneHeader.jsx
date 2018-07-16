@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 import { connect } from 'react-redux';
 import { addLane, updateLane, deleteLane } from '../actions/LaneActions';
-import { addNote } from '../actions/NoteActions';
+import { addNote, deleteAllForLane } from '../actions/NoteActions';
 import Editable from './Editable';
 
 const mapDispatchToProps = dispatch => {
@@ -10,7 +10,8 @@ const mapDispatchToProps = dispatch => {
     addLane: lane => dispatch (addLane(lane)),
     updateLane: lane => dispatch (updateLane(lane)),
     deleteLane: laneId => dispatch (deleteLane(laneId)),
-    addNote: note => dispatch(addNote(note))
+    addNote: note => dispatch(addNote(note)),
+    deleteAllForLane: laneId => dispatch(deleteAllForLane(laneId))
   };
 }
 
@@ -19,7 +20,7 @@ class ConnectedLaneHeader extends Component {
     super(props);    
     this.addNote = this.addNote.bind(this);
     this.editLane = this.editLane.bind(this);    
-    this.deleteLane = this.deleteLane.bind(this);
+    this.deleteLane = this.deleteLane.bind(this);    
   }
 
   addNote(event) {
@@ -42,6 +43,7 @@ class ConnectedLaneHeader extends Component {
 
   deleteLane(event) {
     event.stopPropagation();
+    this.props.deleteAllForLane(this.props.lane.id);
     this.props.deleteLane(this.props.lane.id);
   }
 
@@ -65,51 +67,8 @@ class ConnectedLaneHeader extends Component {
       </div>
     );
   }
-
 }
 
 const LaneHeader = connect(null, mapDispatchToProps)(ConnectedLaneHeader);
 
 export default LaneHeader;
-
-
-// export default connect(() => ({}), {
-//   NoteActions,
-//   LaneActions
-// })(({ lane, LaneActions, NoteActions, ...props }) => {
-//   const addNote = e => {
-//     e.stopPropagation();
-
-//     const noteId = uuid.v4();
-    
-//     NoteActions.create({
-//       id: noteId,
-//       task: 'New task',
-//       laneId: lane.id
-//     });
-//   };
-
-//   const deleteLane = e => {
-//     e.stopPropagation();
-//     NoteActions.deleteAllForLane(lane.id);
-//     LaneActions.delete(lane.id);
-//   };
-
-//   const activateLaneEdit = () => {
-//     LaneActions.update({
-//       id: lane.id,
-//       editing: true
-//     });
-//   };
-//   const editName = name => {
-//     LaneActions.update({
-//       id: lane.id,
-//       name,
-//       editing: false
-//     });
-//   };
-
-//   return (
-    
-//   );
-// })

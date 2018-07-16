@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import rootReducer from '../reducers/index';
+import reducer from '../reducers/index';
 
 const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : 
 {
@@ -7,7 +7,7 @@ const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStor
   notes: []
 }
 
-const store = createStore(rootReducer, persistedState);
+const store = createStore(reducer, persistedState);
 
 store.subscribe(() => {
   localStorage.setItem('reduxState', JSON.stringify(store.getState()))
