@@ -1,5 +1,5 @@
 import {   
-  ADD_LANE, UPDATE_LANE, DELETE_LANE, DELETE_NOTES_FOR_LANE 
+  ADD_LANE, UPDATE_LANE, DELETE_LANE
 } from "../constants/ActionTypes";
 
 const initialState = [];

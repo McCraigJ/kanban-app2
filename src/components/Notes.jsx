@@ -7,7 +7,7 @@ import { moveNote, updateNote, deleteNote } from '../actions/NoteActions';
 
 const mapDispatchToProps = dispatch => {
   return {
-    moveNote: (sourceId, targetId, targetLaneId) => dispatch (moveNote(sourceId, targetId, targetLaneId)),
+    moveNote: note => dispatch (moveNote(note)),
     updateNote: note => dispatch (updateNote(note)),
     deleteNote: noteId => dispatch(deleteNote(noteId))
   };
@@ -16,13 +16,13 @@ const mapDispatchToProps = dispatch => {
 class ConnectedNotes extends Component {
   constructor(props) {
     super(props);   
-    this.moveNote = this.moveNote.bind(this);     
+    this.onMoveNote = this.onMoveNote.bind(this);     
     this.editNote = this.editNote.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
   }
 
-  moveNote(sourceId, targetId, targetLaneId) {
-    this.props.moveNote(sourceId, targetId, targetLaneId);
+  onMoveNote({sourceId, targetId, targetLaneId}) {
+    this.props.moveNote({sourceId, targetId, targetLaneId});
   }
 
   editNote(id, task, laneId) {    
@@ -44,9 +44,9 @@ class ConnectedNotes extends Component {
     var notes = this.props.notes;
 
     return (<ul className="notes">{notes.map(({ id, laneId, editing, task }) =>
-          <li key={id}>            
-            <Note className="note" id={id} laneid={laneId}
-            //onMove={this.moveNote}
+          
+            <Note className="note" id={id} laneid={laneId} key={id}
+            onMove={this.onMoveNote}
             >                  
              
               <Editable className="editable"
@@ -58,7 +58,6 @@ class ConnectedNotes extends Component {
               className="delete"
               onClick={this.deleteNote.bind(null, id)}>x</button> 
             </Note>
-          </li>
         )}</ul>)
   }
 }
@@ -66,28 +65,3 @@ class ConnectedNotes extends Component {
 const Notes = connect(null, mapDispatchToProps)(ConnectedNotes);
 
 export default Notes;
-
-// const Notes = ({ notes,
-//   onNoteClick = () => { },
-//   onEdit = () => { },
-//   onDelete = () => { } }) => (
-
-//     <ul className="notes">{notes.map(({ id, laneId, editing, task }) =>
-//       <li key={id}>
-//         <Note className="note" id={id} laneid={laneId}
-//         onClick={onNoteClick.bind(null, id)}
-//         onMove={this.moveNote}>        
-//         <Editable
-//           className="editable"
-//           editing={editing}
-//           value={task}
-//           onEdit={onEdit.bind(null, id)} />
-//         <button
-//           className="delete"
-//           onClick={onDelete.bind(null, id)}>x</button>
-//       </Note>
-//       </li>
-//     )}</ul>
-//   );
-
-//   export default Notes;

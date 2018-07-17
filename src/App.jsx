@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import uuid from 'uuid';
 import { addLane } from './actions/LaneActions';
 
-//import {compose} from 'redux';
+import {compose} from 'redux';
 
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -11,7 +11,6 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import logo from './logo.svg';
 import './App.css';
 import Lanes from './components/Lanes';
-import LaneActions from './actions/LaneActions';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -23,7 +22,7 @@ const mapStateToProps = state => {
   return { lanes: state.lanes };
 };
 
-class ConnectedApp extends Component {
+class App extends Component {
 
   constructor() {
     super();
@@ -51,66 +50,10 @@ class ConnectedApp extends Component {
         </div>
       </div>
     );
-  }
-  
+  }  
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(ConnectedApp);
-
-export default App;
-
-// // class App extends Component {
-
-// //   render() {
-
-// //     const { notes } = this.props;    
-
-// //     return (
-// //       <div className="App">
-// //         <header className="App-header">
-// //           <img src={logo} className="App-logo" alt="logo" />
-// //           <h1 className="App-title">Welcome to Kanban</h1>
-// //         </header>
-// //         <p className="App-intro">
-// //           To get started, edit <code>src/App.js</code> and save to reload.
-// //         </p>
-// //         <div className="notes-container">          
-// //           <button className="add-note" onClick={this.addNote}>+</button>
-// //           <Notes 
-// //             notes={notes}
-// //             onNoteClick={this.activateNoteEdit}
-// //             onEdit={this.editNote}
-// //             onDelete={this.deleteNote} />
-// //         </div>
-// //       </div>
-// //     );
-// //   }
-
-//   addNote = () => { 
-//     this.props.NoteActions.create({
-//       id: uuid.v4(),
-//       task: 'New task'
-//     });
-//   }
-
-//   deleteNote = (id, e) => {
-//     e.stopPropagation();
-//     this.props.NoteActions.delete(id);
-//   }
-
-//   activateNoteEdit = (id) => {
-//     this.props.NoteActions.update({id, editing: true});    
-//   }
-  
-//   editNote = (id, task) => {
-//     this.props.NoteActions.update({id, editing: false, task: task});       
-//   }
-// }
-
-//export default App;
-
-// export default connect(({notes}) => ({
-//   notes
-// }), {
-//   NoteActions
-// })(App)
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  DragDropContext(HTML5Backend)
+)(App);
