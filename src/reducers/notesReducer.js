@@ -35,11 +35,11 @@ function moveNote(notes, {sourceId, targetId, targetLaneId}) {
     var targetIndex = 0;
     var foundSource = false;
     var foundTarget = false;
-    notes.map(note => {
-      var updateLane = false;
+    var updateCurrentLane = false;    
+    notes.map(note => {      
       if (note.id === sourceId) {
         if (note.laneId !== targetLaneId) {
-          updateLane = true;
+          updateCurrentLane = true;
         }
         //note.laneId = targetLaneId;
         foundSource = true;
@@ -54,9 +54,9 @@ function moveNote(notes, {sourceId, targetId, targetLaneId}) {
       if (!foundTarget) {
         targetIndex++;
       }
-      if (updateLane) {
-        return {...note, laneId: targetLaneId };
-      }
+      // if (updateLane) {
+      //   return {...note, laneId: targetLaneId };
+      // }
       return note;
       
     });
@@ -68,6 +68,10 @@ function moveNote(notes, {sourceId, targetId, targetLaneId}) {
     if (!movingToEmptyLane) {
       var notesWithoutSource = [...notes.slice(0, sourceIndex), ...notes.slice(sourceIndex + 1)];
       var movedNote = notes[sourceIndex];
+      if (updateCurrentLane) {
+        movedNote.laneId = targetLaneId;
+      }
+      
       return [...notesWithoutSource.slice(0, targetIndex), movedNote, ...notesWithoutSource.slice(targetIndex)];
     }
     
