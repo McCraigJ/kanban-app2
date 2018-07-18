@@ -28,9 +28,8 @@ export default (state = initialState, action) => {
 
 function moveNote(notes, {sourceId, targetId, targetLaneId}) {
     
-    const movingToEmptyLane = targetId === null;
-
-    // update the source's lane and find it's index
+    const movingToEmptyLane = targetId === null;        
+    
     var sourceIndex = 0;
     var targetIndex = 0;
     var foundSource = false;
@@ -41,7 +40,6 @@ function moveNote(notes, {sourceId, targetId, targetLaneId}) {
         if (note.laneId !== targetLaneId) {
           updateCurrentLane = true;
         }
-        //note.laneId = targetLaneId;
         foundSource = true;
       }
       if (note.id === targetId) {
@@ -54,29 +52,27 @@ function moveNote(notes, {sourceId, targetId, targetLaneId}) {
       if (!foundTarget) {
         targetIndex++;
       }
-      // if (updateLane) {
-      //   return {...note, laneId: targetLaneId };
-      // }
+      
       return note;
       
     });
 
-    if (!(foundSource && foundTarget))  {
+    if (!(foundSource && (foundTarget || movingToEmptyLane)))  {
       return notes;
     }
 
-    if (!movingToEmptyLane) {
-      var notesWithoutSource = [...notes.slice(0, sourceIndex), ...notes.slice(sourceIndex + 1)];
-      var movedNote = notes[sourceIndex];
-      if (updateCurrentLane) {
-        movedNote.laneId = targetLaneId;
-      }
-      
-      return [...notesWithoutSource.slice(0, targetIndex), movedNote, ...notesWithoutSource.slice(targetIndex)];
+    if (movingToEmptyLane) {
+      targetIndex = sourceIndex;  
     }
     
-
-    return notes;
+    var notesWithoutSource = [...notes.slice(0, sourceIndex), ...notes.slice(sourceIndex + 1)];
+    var movedNote = notes[sourceIndex];
+    if (updateCurrentLane) {
+      movedNote.laneId = targetLaneId;
+    }
+    
+    return [...notesWithoutSource.slice(0, targetIndex), movedNote, ...notesWithoutSource.slice(targetIndex)];
+     
 }
 
 function updateNote(notes, updatedNote) {

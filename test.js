@@ -1,14 +1,8 @@
-var notes = ['ant', 'bison', 'camel', 'duck', 'elephant'];
- console.log(notes);
+//var notes = ['ant', 'bison', 'camel', 'duck', 'elephant'];
+ 
 
-// console.log(notes.slice(2));
-// // expected output: Array ["camel", "duck", "elephant"]
-
-// console.log(notes.slice(2, 4));
-// // expected output: Array ["camel", "duck"]
-
-// console.log(notes.slice(1, 5));
-// // expected output: Array ["bison", "camel", "duck", "elephant"]
+var notes = [ { note: { id: 1, task: 'note1'}, lane: 1}, { note: { id: 2, task: 'note2'}, lane: 1}, { note: { id: 3, task: 'note3'}, lane: 1}];
+console.log(notes);
 
 
 var removed = [
@@ -53,6 +47,24 @@ function moveAfter(source, target) {
 
   console.log(updatedNotes);
 
+  //var updatedNotes2 = 
+
 }
 
-moveAfter('ant', 'elephant');
+function updateItem(sourceId, newLaneId) {  
+  notes.map(note => {
+    
+    if (note.note.id === sourceId) {
+      //console.log(note.lane);
+      return { ...note, lane: newLaneId };
+     //return { ...note, ...newValue} 
+     //console.log(Object.assign({}, note, newValue));
+     //return Object.assign({}, note, note.lane);
+    }    
+    return note;
+  });
+  //console.log(notes);
+}
+
+//moveAfter('ant', 'elephant');
+updateItem(1, 2);

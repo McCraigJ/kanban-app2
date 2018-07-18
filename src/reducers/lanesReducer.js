@@ -12,7 +12,7 @@ export default (state = initialState, action) => {
 
     case UPDATE_LANE:
       var updatedLanes = updateLane(state, action.payload);
-      return updatedLanes; // { ...state, lanes: updatedLanes };
+      return updatedLanes; 
 
     case DELETE_LANE:
       return state.filter(lane => lane.id !== action.payload);
