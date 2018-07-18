@@ -18,10 +18,13 @@ const laneTarget = {
     const sourceProps = monitor.getItem();
     const sourceId = sourceProps.id;
     const targetLaneId = targetProps.id;
-
-    if(sourceId !== targetId) {
-      targetProps.onMoveNote({sourceId, targetId, targetLaneId});
+    if (targetProps.notes.length === 0) {
+      console.log("hover over empty");
     }
+    
+    // if(sourceId !== targetId) {
+    //   targetProps.onMoveNote({sourceId, targetId, targetLaneId});
+    // }
   }
 };
 
@@ -40,7 +43,7 @@ const mapDispatchToProps = dispatch => {
 class Lane extends Component {
   constructor(props) {
     super(props);    
-    this.onMoveNote = this.onMoveNote.bind(this);
+    //this.onMoveNote = this.onMoveNote.bind(this);
   }  
 
   onMoveNote({sourceId, targetId, targetLaneId}) {
@@ -54,7 +57,7 @@ class Lane extends Component {
       onMove, id,  ...props} = this.props;
 
 
-    return (<div className={this.props.className} key={this.props.lane.id} lane={this.props.lane}>  
+    return connectDropTarget(<div className={this.props.className} key={this.props.lane.id} lane={this.props.lane}>  
        <LaneHeader lane={this.props.lane} />
        <Notes notes={selectNotesByLaneId(this.props.notes, this.props.lane.id)} />
      </div>
